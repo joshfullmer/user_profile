@@ -2105,3 +2105,20 @@ input[type="email"].circle--input--h6, input[type="number"].circle--input--h6, i
 .logo:hover {
   box-shadow: 0 0 0 15px #fff inset;
 }
+
+
+.image-cropper {
+  width: 150px;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  margin: auto;
+}
+
+img {
+  display: inline;
+  margin-left: -25%;
+  height: 100%;
+  width: auto;
+}

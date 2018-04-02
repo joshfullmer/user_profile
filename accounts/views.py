@@ -78,5 +78,13 @@ def user_profile(request):
             user_profile = form.save(commit=False)
             user_profile.user = request.user
             user_profile.save()
-            return HttpResponseRedirect('/accounts/profile/edit/')
+            return HttpResponseRedirect('/accounts/profile/view/')
     return render(request, 'accounts/userprofile_form.html', {'form': form})
+
+
+@login_required
+def user_profile_detail(request):
+    user_profile = models.UserProfile.objects.get(user=request.user)
+    return render(request,
+                  'accounts/userprofile_detail.html',
+                  {'user_profile': user_profile})

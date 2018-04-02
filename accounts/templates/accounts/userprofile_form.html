@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
-{% block title %}Manage User Profile | {{ super }}{% endblock %}
+{% block title %}Manage User Profile | {{ block.super }}{% endblock %}
 
 {% block body %}
-<form method="POST" action="{% url 'accounts:user_profile' %}" enctype="multipart/form-data">
+<form method="POST" action="{% url 'accounts:user_profile_edit' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" class="button-primary" value="Save Profile">

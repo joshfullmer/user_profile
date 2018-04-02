@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block title %}{{ user.username }}'s Profile | {{ block.super }}{% endblock %}
+
+{% block body %}
+<div class="grid-30">
+    <div class="image-cropper">
+        <img class="profile-pic" src="{{ user_profile.avatar.url }}" >
+    </div>
+    <h3>{{ user.username }}</h3>
+</div>
+<div class="grid-70">
+    <p>First Name: {{ user_profile.first_name }}</p>
+    <p>Last Name: {{ user_profile.last_name }}</p>
+    <p>Email: {{ user_profile.email }}</p>
+    <p>Birthday: {{ user_profile.date_of_birth }}</p>
+    <p>Bio: {{ user_profile.bio }}</p>
+    <p>Hobbies: {{ user_profile.hobbies }}</p>
+    <p>City: {{ user_profile.city }}</p>
+    <p>State: {{ user_profile.state }}</p>
+    <p>Country: {{ user_profile.country }}</p>
+</div>
+{% endblock %}
