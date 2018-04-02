@@ -10,6 +10,7 @@
         <img class="profile-pic" src="{{ user_profile.avatar.url }}" >
     </div>
     <h3>{{ user.username }}</h3>
+    <a href="{% url 'accounts:change_password' %}" class="button-primary">Change Password</a>
 </div>
 <div class="grid-70">
     <p>First Name: {{ user_profile.first_name }}</p>

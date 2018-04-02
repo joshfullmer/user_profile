@@ -1,11 +1,15 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import (
+    authenticate, login, logout, update_session_auth_hash
+)
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm, UserCreationForm, PasswordChangeForm
+)
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from . import forms
 from . import models
@@ -88,3 +92,29 @@ def user_profile_detail(request):
     return render(request,
                   'accounts/userprofile_detail.html',
                   {'user_profile': user_profile})
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = forms.ChangePasswordForm(data=request.POST, request=request)
+        if form.is_valid():
+            user = request.user
+            print(form.cleaned_data['new_password'])
+            print(user.password)
+            if user.check_password(form.cleaned_data['old_password']):
+                user.set_password(form.cleaned_data['new_password'])
+                user.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, "Password successfully updated.")
+                return HttpResponseRedirect('accounts/profile/view/')
+            else:
+                messages.error(request, "Old password incorrect.")
+        else:
+            messages.error(request, "Please correct the error below:")
+    else:
+        form = forms.ChangePasswordForm(request=request)
+    return render(
+        request,
+        'accounts/change_password_form.html',
+        {'form': form})

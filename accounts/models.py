@@ -13,4 +13,6 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    user = models.ForeignKey(User, related_name="profile")
+    user = models.OneToOneField(User,
+                                related_name="profile",
+                                on_delete=models.CASCADE)
