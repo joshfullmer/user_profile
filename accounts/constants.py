@@ -1,4 +1,10 @@
 PASSWORD_HELP_TEXT = """
+<div>
+    Strength:
+    <div id="password_strength" style="display:inline-block"></div>
+    (<div id="password_score" style="display:inline-block"></div>)
+</div>
+<hr>
 <ul>
     <li>Cannot match the old password</li>
     <li>Must be at least 14 characters long</li>

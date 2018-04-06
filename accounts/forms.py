@@ -1,4 +1,5 @@
 from django import forms
+from tinymce.widgets import TinyMCE
 
 from . import models
 from .constants import PASSWORD_HELP_TEXT, PASSWORD_SPEC_CHARS
@@ -6,6 +7,7 @@ from .constants import PASSWORD_HELP_TEXT, PASSWORD_SPEC_CHARS
 
 class UserProfileForm(forms.ModelForm):
     email2 = forms.EmailField(label='Confirm email address')
+    bio = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
 
     class Meta:
         model = models.UserProfile
@@ -34,9 +36,11 @@ class UserProfileForm(forms.ModelForm):
 
 
 class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField()
-    new_password = forms.CharField(help_text=PASSWORD_HELP_TEXT)
-    new_password2 = forms.CharField(label='Confirm new password')
+    old_password = forms.CharField(widget=forms.PasswordInput())
+    new_password = forms.CharField(help_text=PASSWORD_HELP_TEXT,
+                                   widget=forms.PasswordInput())
+    new_password2 = forms.CharField(label='Confirm new password',
+                                    widget=forms.PasswordInput())
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -66,10 +70,14 @@ class ChangePasswordForm(forms.Form):
         if not any(letter in PASSWORD_SPEC_CHARS for letter in password):
             raise forms.ValidationError(
                 "Password must contain at least special character")
-        profile = self.request.user.profile
-        if (profile.first_name.lower() in password.lower() or
-                profile.last_name.lower() in password.lower()):
-            raise forms.ValidationError(
-                "Password cannot contain your first or last name")
+        try:
+            profile = self.request.user.profile
+        except models.UserProfile.DoesNotExist:
+            pass
+        else:
+            if (profile.first_name.lower() in password.lower() or
+                    profile.last_name.lower() in password.lower()):
+                raise forms.ValidationError(
+                    "Password cannot contain your first or last name")
 
         return cleaned_data

@@ -71,8 +71,7 @@ def user_profile(request):
         profile = models.UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
         profile = None
-    else:
-        form = forms.UserProfileForm(instance=profile)
+    form = forms.UserProfileForm(instance=profile)
     if request.method == 'POST':
         form = forms.UserProfileForm(
             request.POST,
@@ -88,7 +87,10 @@ def user_profile(request):
 
 @login_required
 def user_profile_detail(request):
-    user_profile = models.UserProfile.objects.get(user=request.user)
+    try:
+        user_profile = models.UserProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        user_profile = None
     return render(request,
                   'accounts/userprofile_detail.html',
                   {'user_profile': user_profile})
@@ -100,8 +102,6 @@ def change_password(request):
         form = forms.ChangePasswordForm(data=request.POST, request=request)
         if form.is_valid():
             user = request.user
-            print(form.cleaned_data['new_password'])
-            print(user.password)
             if user.check_password(form.cleaned_data['old_password']):
                 user.set_password(form.cleaned_data['new_password'])
                 user.save()
@@ -112,8 +112,7 @@ def change_password(request):
                 messages.error(request, "Old password incorrect.")
         else:
             messages.error(request, "Please correct the error below:")
-    else:
-        form = forms.ChangePasswordForm(request=request)
+    form = forms.ChangePasswordForm(request=request)
     return render(
         request,
         'accounts/change_password_form.html',

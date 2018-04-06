@@ -17,7 +17,7 @@
     <p>Last Name: {{ user_profile.last_name }}</p>
     <p>Email: {{ user_profile.email }}</p>
     <p>Birthday: {{ user_profile.date_of_birth }}</p>
-    <p>Bio: {{ user_profile.bio }}</p>
+    <p>Bio: {{ user_profile.bio|safe }}</p>
     <p>Hobbies: {{ user_profile.hobbies }}</p>
     <p>City: {{ user_profile.city }}</p>
     <p>State: {{ user_profile.state }}</p>
