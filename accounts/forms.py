@@ -1,4 +1,5 @@
 from django import forms
+from PIL import Image
 from tinymce.widgets import TinyMCE
 
 from . import models
@@ -81,3 +82,13 @@ class ChangePasswordForm(forms.Form):
                     "Password cannot contain your first or last name")
 
         return cleaned_data
+
+
+class AvatarEditForm(forms.Form):
+    x = forms.FloatField(widget=forms.HiddenInput())
+    y = forms.FloatField(widget=forms.HiddenInput())
+    width = forms.FloatField(widget=forms.HiddenInput())
+    height = forms.FloatField(widget=forms.HiddenInput())
+    rotate = forms.FloatField(widget=forms.HiddenInput())
+    scaleX = forms.FloatField(widget=forms.HiddenInput())
+    scaleY = forms.FloatField(widget=forms.HiddenInput())

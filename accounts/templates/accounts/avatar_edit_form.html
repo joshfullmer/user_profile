@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block title %}Edit Avatar | {{ block.super }}{% endblock %}
+
+{% block body %}
+<img id="image" src="{{ avatar.url }}">
+<button type="button" class="button-primary zoom-in">Zoom In</button>
+<button type="button" class="button-primary zoom-out">Zoom Out</button>
+<button type="button" class="button-primary rotate-cw">Rotate Clockwise</button>
+<button type="button" class="button-primary rotate-ccw">Rotate Counterclockwise</button>
+<button type="button" class="button-primary mirror">Mirror</button>
+<form method="POST" id="avatar_edit">
+    {% csrf_token %}
+    {{ form }}
+</form>
+<button type="button" class="button-primary submit">Save Changes</button>
+{% endblock %}
+
+{% block media %}
+<script src="{% static "js/cropper.js" %}"></script><!-- Cropper.js is required -->
+<link  href="{% static "css/cropper.css" %}" rel="stylesheet">
+<script src="{% static "js/jquery-cropper.js" %}"></script>
+<script>
+    $(function () {
+        var $image = $("#image");
+        $image.cropper({
+            viewMode: 1,
+            minCropBoxWidth: 200,
+            minCropBoxHeight: 200
+        });
+
+        $(".zoom-in").click(function () {
+            $image.cropper("zoom", 0.1);
+        });
+
+        $(".zoom-out").click(function () {
+            $image.cropper("zoom", -0.1);
+        });
+
+        $(".rotate-cw").click(function () {
+            $image.cropper("rotate", 90);
+        });
+
+        $(".rotate-ccw").click(function () {
+            $image.cropper("rotate", -90);
+        });
+
+        $(".mirror").click(function () {
+            var cropData = $image.cropper("getData")
+            if (cropData['scaleX'] == 1) {
+                $image.cropper("scale", -1, 1);
+            } else {
+                $image.cropper("scale", 1);
+            }
+        });
+
+        $(".submit").click(function () {
+            var cropData = $image.cropper("getData");
+            $("#id_x").val(cropData["x"]);
+            $("#id_y").val(cropData["y"]);
+            $("#id_width").val(cropData["width"]);
+            $("#id_height").val(cropData["height"]);
+            $("#id_rotate").val(cropData["rotate"]);
+            $("#id_scaleX").val(cropData["scaleX"]);
+            $("#id_scaleY").val(cropData["scaleY"]);
+            $("#avatar_edit").submit();
+        });
+    });
+</script>
+{% endblock %}

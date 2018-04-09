@@ -10,6 +10,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import never_cache
+from PIL import Image
 
 from . import forms
 from . import models
@@ -86,6 +88,7 @@ def user_profile(request):
 
 
 @login_required
+@never_cache  # Don't cache the user profile image, so edits immediately appear
 def user_profile_detail(request):
     try:
         user_profile = models.UserProfile.objects.get(user=request.user)
@@ -117,3 +120,28 @@ def change_password(request):
         request,
         'accounts/change_password_form.html',
         {'form': form})
+
+
+@login_required
+def edit_avatar(request):
+    avatar = request.user.profile.avatar
+    if request.method == 'POST':
+        form = forms.AvatarEditForm(request.POST)
+        if form.is_valid():
+            x = form.cleaned_data.get('x')
+            y = form.cleaned_data.get('y')
+            width = form.cleaned_data.get('width')
+            height = form.cleaned_data.get('height')
+            rotate = form.cleaned_data.get('rotate')
+
+            image = Image.open(avatar)
+            image = image.crop((x, y, width+x, height+y))
+            image = image.rotate(-rotate, expand=True)
+            if form.cleaned_data.get('scaleX') == -1:
+                image = image.transpose(Image.FLIP_LEFT_RIGHT)
+            image.save(avatar.path)
+            return HttpResponseRedirect(reverse('accounts:user_profile_view'))
+    else:
+        form = forms.AvatarEditForm()
+    return render(request, 'accounts/avatar_edit_form.html',
+                  {'form': form, 'avatar': avatar})

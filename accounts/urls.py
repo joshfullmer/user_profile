@@ -15,4 +15,5 @@ urlpatterns = [
         r'profile/change_password/$',
         views.change_password,
         name='change_password'),
+    url(r'profile/edit_avatar/$', views.edit_avatar, name='edit_avatar')
 ]
