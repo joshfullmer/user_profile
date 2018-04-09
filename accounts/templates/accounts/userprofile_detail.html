@@ -7,7 +7,10 @@
 {% block body %}
 <div class="grid-30">
     <div class="image-cropper">
-        <a href="{% url 'accounts:edit_avatar' %}"><img class="profile-pic" src="{{ user_profile.avatar.url }}" ></a>
+        <img class="profile-pic" src="{{ user_profile.avatar.url }}" >
+        <a href="{% url 'accounts:edit_avatar' %}">
+            <button type="button" class="button-primary edit">Edit</button>
+        </a>
     </div>
     <h3>{{ user.username }}</h3>
     <a href="{% url 'accounts:change_password' %}" class="button-primary">Change Password</a>

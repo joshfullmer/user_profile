@@ -2116,9 +2116,33 @@ input[type="email"].circle--input--h6, input[type="number"].circle--input--h6, i
 }
 
 img.profile-pic {
-  display: inline-block;
+  left: 50%;
+  display: block;
   height: 100%;
   width: auto;
+  opacity: 1;
+  transition: .5s ease;
+  backface-visibility: hidden;
+  margin: 0 auto;
+}
+
+.edit {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.image-cropper:hover .profile-pic {
+  opacity: 0.3;
+}
+
+.image-cropper:hover .edit {
+  opacity: 1;
 }
 
 #image {
