@@ -1,4 +1,5 @@
 from django import forms
+import re
 from tinymce.widgets import TinyMCE
 
 from . import models
@@ -29,7 +30,9 @@ class UserProfileForm(forms.ModelForm):
         cleaned_data = super(UserProfileForm, self).clean()
         if cleaned_data['email'] != cleaned_data['email2']:
             raise forms.ValidationError("Email addresses don't match")
-        if len(cleaned_data.get('bio', '')) < 10:
+        bio = cleaned_data.get('bio', '')
+        bio = re.sub('<[^<]+?>', '', bio)
+        if len(bio) < 10:
             raise forms.ValidationError(
                 "Bio must be longer than 10 characters")
         return cleaned_data
