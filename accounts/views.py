@@ -4,12 +4,12 @@ from django.contrib.auth import (
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import (
-    AuthenticationForm, UserCreationForm, PasswordChangeForm
+    AuthenticationForm, UserCreationForm
 )
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 from PIL import Image
 
